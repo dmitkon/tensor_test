@@ -42,19 +42,8 @@ class YandexScenariosTest(unittest.TestCase):
         self.assertNotEqual(image_link, None, "image link not found")
 
         image_link.click()
-        driver.get(image_link.get_attribute("href"))
-        self.assertEqual(driver.current_url.split('?')[0], "https://yandex.ru/images/")
-
-        #group = driver.find_elements(By.XPATH, "//div[@data-grid-name='im']")
-        #print(list(map(lambda a: a.get_attribute("data-grid-text"), group)))
-        
-        group = driver.find_element(By.XPATH, "//div[@data-grid-name='im'][1]")
-        group.click()
-        search = driver.find_element(By.NAME, "text")
-        self.assertEqual(group.get_attribute("data-grid-text"), search.get_attribute("value"))
-
-        #image = driver.find_element(By.XPATH, "//div[@role='item'][1]")
-        #image.click()
+        driver.switch_to.window(driver.window_handles[1])
+        self.assertEqual(driver.current_url.split('?')[0], "https://yandex.ru/images/", "image link does not work")
 
     def tearDown(self):
         self.driver.quit()
