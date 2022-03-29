@@ -55,9 +55,8 @@ class YandexScenariosTest(unittest.TestCase):
         self.assertEqual(driver.current_url.split('?')[0], "https://yandex.ru/images/", "image link does not work")
         
         group = driver.find_element(By.XPATH, "//div[@data-grid-name='im'][1]")
-        group_link = group.find_element(By.TAG_NAME, "a")
-        #print(group_link.get_attribute("href"))
         group_name = group.get_attribute("data-grid-text")
+        group_link = group.find_element(By.TAG_NAME, "a")
         group_link.click()
         driver.get(group_link.get_attribute("href"))
         search = driver.find_element(By.NAME, "text")
@@ -70,6 +69,18 @@ class YandexScenariosTest(unittest.TestCase):
         image_url = get_image_url(driver.current_url)
         self.assertNotEqual(image_view, None, "Image view not open")
         self.assertTrue(image_item_url == image_url, "Wrong image was opened")
+
+        image_src = image_view.get_attribute("src")
+        forward_arrow = driver.find_element(By.CSS_SELECTOR, "div.CircleButton:nth-child(4)")
+        forward_arrow.click()
+        next_image_src = image_view.get_attribute("src")
+        self.assertNotEqual(image_src, next_image_src, "the following image did not open")
+
+        forward_arrow = driver.find_element(By.CSS_SELECTOR, ".CircleButton_type_prev")
+        forward_arrow.click()
+        prev_image_src = image_view.get_attribute("src")
+        self.assertEqual(prev_image_src, image_src,  "the previous image did not open")
+        
 
     def tearDown(self):
         self.driver.quit()
